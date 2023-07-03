@@ -57,7 +57,7 @@ const Notifications = () => {
 
         {notifications.map((notification) => (
           <Card
-            key={notification.NotificationId}
+            key={notification.id}
             title={`${notification.title}-${notification.time}`}
             style={{ width: 325, marginTop: 5 }}
           >

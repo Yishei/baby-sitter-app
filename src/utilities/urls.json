@@ -6,7 +6,7 @@
   "clockInUrl": "http://localhost:8080/time/in",
   "clockOutUrl": "http://localhost:8080/time/out/",
   "getLestTimeUrl": "http://localhost:8080/time/lestRecord",
-  "updateClockInStateUrl": "http://localhost:8080/time/clockdInStatus/",
+  "updateClockInStateUrl": "http://localhost:8080/time/UpdateclockStatus/",
   "getAllTimeUrl": "http://localhost:8080/time/all",
   "getAllPaymentsUrl": "http://localhost:8080/pay/all",
   "getAllNotficationsUrl": "http://localhost:8080/notification/all",
@@ -17,7 +17,7 @@
   "updateUserInfoUrl": "http://localhost:8080/settings/updateInfo",
   "verifyTokenUrl": "http://localhost:8080/verify/token",
   "getPayByIdUrl": "http://localhost:8080/pay/byId/",
-  "createNewPayUrl": "http://localhost:8080/pay/newRecord",
+  "createNewPayUrl": "http://localhost:8080/pay/newPayment",
   "updatePayByIdUrl": "http://localhost:8080/pay/update/",
   "deletePayByIdUrl": "http://localhost:8080/pay/delete/"
 }

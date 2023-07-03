@@ -70,9 +70,8 @@ export const clockIn = async () => {
         Authorization: "Bearer " + localStorage.getItem("token"),
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ in: new Date(), forDate: new Date() }),
+      body: JSON.stringify({ timeIn: new Date(), forDate: new Date() }),
     });
-    console.log("respons status", respons.status);
     let info = await respons.json();
     return info;
   } catch (e) {
@@ -81,9 +80,7 @@ export const clockIn = async () => {
 };
 
 export const clockOut = async (recordId) => {
-  console.log("from clockOut");
   try {
-    console.log("from try in clockOut");
     const respons = await fetch(`${urls.clockOutUrl}${recordId}`, {
       method: "PUT",
       headers: {
@@ -115,7 +112,6 @@ export const getLestRecordId = async () => {
 };
 
 export const updateClockInState = async (state) => {
-  console.log("from updateClockInState");
   try {
     const res = await fetch(`${urls.updateClockInStateUrl}${state}`, {
       method: "PUT",
@@ -124,7 +120,6 @@ export const updateClockInState = async (state) => {
       },
     });
     let info = await res.json();
-    console.log("info", info);
     return info;
   } catch (e) {
     return "fail";

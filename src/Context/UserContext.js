@@ -36,7 +36,7 @@ export const UserContextProvider = ({ children }) => {
       localStorage.setItem("user", JSON.stringify(res));
       setUserInfo(res);
     } catch (e) {
-      console.log(e);
+      return "fail";
     }
   };
 

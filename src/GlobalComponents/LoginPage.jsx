@@ -15,11 +15,9 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
   const handleLogInResponse = (response) => {
-    console.log("handleLogInResponse", response)
     let wrong = "";
     switch (response) {
       case 200:
-        console.log("success");
         navigate("/");
         break;
       case 404:

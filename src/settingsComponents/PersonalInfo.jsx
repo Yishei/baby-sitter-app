@@ -25,7 +25,6 @@ const PersonalInfo = () => {
         setLoading(true);
         updateUserInfo(values).then((res) => {
           setLoading(false);
-          console.log(res)
           if (res === "sucsess") {
             setDisabled(true);
             successMsg("You have successfully updated your personal info");
