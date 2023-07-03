@@ -1,38 +1,109 @@
-.App {
+.components-table-demo-control-bar .ant-form-item {
+  margin-right: 16px;
+  margin-bottom: 8px;
+}
+
+Footer {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+Content {
+  margin: 0 16px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.content-div-main {
+  padding: 24;
+  min-height: 360;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.clock-in-btn-div {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin-right: 20px;
 }
 
-.App-link {
-  color: #61dafb;
+.clock-btn {
+  width: 120px;
+  height: 40px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.user-info-avatar {
+  float: left;
+  margin: 25px 0px 25px 40px;
+  padding-left: 0px;
+}
+
+.user-info-space {
+  display: initial;
+  float: left;
+  margin-left: 65px;
+  margin-top: 20px;
+}
+
+.User-Info-Div {
+  margin: 8px;
+  padding-right: 10px;
+}
+
+.status-perent-card {
+  margin-top: 16px;
+  height: 100%;
+}
+
+.status-perent-card-div {
+  margin-top: 16px;
+  font-size: 25px;
+  font-weight: bolder;
+  text-align: center;
+}
+
+.status-child-card {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.status-child-card-div {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.total-card {
+  margin-top: 16px;
+  height: 100%;
+}
+
+.total-card-div {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.events {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.events .ant-badge-status {
+  width: 100%;
+  overflow: hidden;
+  font-size: 12px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.notes-month {
+  font-size: 28px;
+  text-align: center;
+}
+.notes-month section {
+  font-size: 28px;
+}
+
+.loading {
+  opacity: 0.25;
+  transition: opacity 200ms;
+  transition-delay: 200ms;
+}
+
+.list-Item :hover {
+  cursor: pointer;
 }
