@@ -107,3 +107,7 @@ Content {
 .list-Item :hover {
   cursor: pointer;
 }
+
+.ant-table-row:hover {
+  cursor: pointer;
+}

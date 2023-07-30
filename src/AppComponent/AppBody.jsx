@@ -41,7 +41,7 @@ function AppBody() {
               </div>
             </Content>
           </Spin>
-          <Notifications />
+          {/* <Notifications /> */}
           <Footer
             style={{
               textAlign: "center",

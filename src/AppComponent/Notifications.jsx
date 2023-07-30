@@ -43,7 +43,8 @@ const Notifications = () => {
           size: "small",
         }}
         style={{
-          right: 50,
+          right: 25,
+          bottom: 100,
         }}
       />
       <Drawer

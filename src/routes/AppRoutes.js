@@ -18,6 +18,8 @@ import SignUp from "../GlobalComponents/SignUp";
 import LoginPage from "../GlobalComponents/LoginPage";
 import NotFound from "../GlobalComponents/NotFound";
 import About from "../GlobalComponents/About";
+import OtpInput from "../GlobalComponents/otpReq";
+import ResetPass from "../GlobalComponents/ResetPass";
 
 // app components
 import AppBody from "../AppComponent/AppBody";
@@ -78,6 +80,8 @@ const appRoutes = createBrowserRouter(
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/about" element={<About />} />
+      <Route path="/otp" element={<OtpInput />} />
+      <Route path="resetPass" element={<ResetPass />} />
       <Route path="*" element={<NotFound />} />
     </Route>
   )

@@ -1,11 +1,23 @@
-import { Table, Button, Modal } from "antd";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+  Table,
+  Button,
+  Divider,
+  Dropdown,
+  Card,
+  Space,
+  FloatButton,
+} from "antd";
+import {
+  ToolOutlined,
+  FilterOutlined,
+  CloudDownloadOutlined,
+} from "@ant-design/icons";
 import { useState, useContext } from "react";
 import { MessageContext } from "../Context/MessageContext";
 import { getFormattedPaymentsData } from "../utilities/LoderData";
-import { deletePayRecordById } from "../utilities/PayFuctionality";
 import PayModal from "./PayModal";
 import { useLoaderData } from "react-router-dom";
+import exportFromJSON from "export-from-json";
 
 const PayTable = () => {
   const [data, setData] = useState(useLoaderData());
@@ -13,8 +25,7 @@ const PayTable = () => {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editRecord, setEditRecord] = useState(null);
-  const { messageApi, contextHolder, successMsg, errorMsg, loadingMsg } =
-    useContext(MessageContext);
+  const { contextHolder } = useContext(MessageContext);
 
   const columns = [
     {
@@ -48,25 +59,6 @@ const PayTable = () => {
       dataIndex: "method",
       key: "method",
     },
-    {
-      title: "Action",
-      key: "action",
-      render: (record) => {
-        return (
-          <>
-            <EditOutlined
-              onClick={() => {
-                onEditPayment(record);
-              }}
-            />
-            <DeleteOutlined
-              onClick={() => onDeletePayment(record)}
-              style={{ color: "red", marginLeft: 12 }}
-            />
-          </>
-        );
-      },
-    },
   ];
 
   const fetchDate = async () => {
@@ -79,53 +71,88 @@ const PayTable = () => {
     setIsUpdateModalOpen(true);
   };
 
-  const onDeletePayment = (record) => {
-    Modal.confirm({
-      title: "Delete Payment?",
-      content: `Are you sure you want to delete this record?`,
-      okText: "Yes",
-      okType: "danger",
-      cancelText: "Cancel",
-      onOk: () => {
-        loadingMsg("Deleting Record");
-        deletePayment(record);
-      },
-    });
-  };
-
-  const deletePayment = async (record) => {
-    const res = await deletePayRecordById(record.id);
-    messageApi.destroy();
-    if (res === "sucsess") {
-      successMsg("Record Deleted");
-    } else {
-      errorMsg("failed to delete record");
-    }
-    fetchDate();
-  };
-
   const onEditPayment = (record) => {
     setIsEdit(true);
     setEditRecord(record);
     setIsUpdateModalOpen(true);
   };
 
+  const handleOnExport = () => {
+    const fileName = "payments";
+    const exportType = exportFromJSON.types.csv;
+
+    exportFromJSON({ data, fileName, exportType });
+  };
+
+  const items = [
+    {
+      key: "1",
+      label: "Download",
+      icon: <CloudDownloadOutlined />,
+      onClick: handleOnExport,
+    },
+    {
+      key: "2",
+      label: "Filter",
+      icon: <FilterOutlined />,
+    },
+  ];
+
   return (
     <>
       {contextHolder}
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <Button
-          type="primary"
-          onClick={onAddPayment}
-          style={{ margin: 20, alignSelf: "center" }}
-        >
-          Make A Payment
-        </Button>
-      </div>
+      <Space style={{ width: "100%", justifyContent: "space-between" }}>
+        <Space direction="vertical">
+          <Button
+            type="primary"
+            onClick={onAddPayment}
+            style={{ width: "150px" }}
+          >
+            Make A Payment
+          </Button>
+          <Dropdown
+            menu={{
+              items: items,
+              selectable: true,
+              defaultActiveFirst: true,
+              onClick: ({ key, label }) => console.log(`${key}: ${label}`),
+            }}
+          >
+            <Button
+              type="default"
+              icon={<ToolOutlined />}
+              style={{ width: "150px" }}
+            >
+              Options
+            </Button>
+          </Dropdown>
+        </Space>
+        <Space>
+          <Card
+            title="Total Payments"
+            style={{
+              width: "300px",
+              backgroundColor: "#f0f2f5",
+              margin: "20 20 0 0",
+              textAlign: "center",
+            }}
+          >
+            <strong>${data.reduce((a, b) => a + b.amount, 0)}</strong>
+          </Card>
+        </Space>
+      </Space>
+      <Divider orientation="left"> Payment History</Divider>
       <Table
         columns={columns}
         dataSource={data}
         rowKey={(record) => record.id}
+        onRow={(record, rowIndex) => {
+          return {
+            onClick: (event) => {
+              onEditPayment(record);
+            },
+          };
+        }}
         loading={loading}
       ></Table>
       <PayModal
@@ -137,6 +164,7 @@ const PayTable = () => {
         isUpdateModalOpen={isUpdateModalOpen}
         setIsUpdateModalOpen={setIsUpdateModalOpen}
       />
+      <FloatButton.BackTop />
     </>
   );
 };

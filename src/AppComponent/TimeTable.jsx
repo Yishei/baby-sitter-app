@@ -1,14 +1,23 @@
-import { Button, Modal, Table } from "antd";
+import {
+  Button,
+  Table,
+  FloatButton,
+  Space,
+  Dropdown,
+  Card,
+  Divider,
+} from "antd";
 import { useState, useContext } from "react";
-import { UserContext } from "../Context/UserContext";
 import { MessageContext } from "../Context/MessageContext";
 import { getFormattedTimeData } from "../utilities/LoderData";
 import {
-  deleteTimeRecordById,
-} from "../utilities/ClockFuctionality";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+  CloudDownloadOutlined,
+  FilterOutlined,
+  ToolOutlined,
+} from "@ant-design/icons";
 import ClockModal from "./ClockModal";
 import { useLoaderData } from "react-router-dom";
+import exportFromJSON from "export-from-json";
 
 const TimeTable = () => {
   const [data, setData] = useState(useLoaderData());
@@ -16,9 +25,7 @@ const TimeTable = () => {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editRecord, setEditRecord] = useState(null);
-  const { messageApi, contextHolder, successMsg, errorMsg, loadingMsg } =
-    useContext(MessageContext);
-  const { getClockedInStatusAndId, retsetUserInfo } = useContext(UserContext);
+  const { contextHolder } = useContext(MessageContext);
 
   const columns = [
     {
@@ -68,26 +75,6 @@ const TimeTable = () => {
         return isNaN(value) ? "" : `$${value.toFixed(2)}`;
       },
     },
-    {
-      title: "Action",
-      key: "action",
-      width: "15%",
-      render: (record) => {
-        return (
-          <>
-            <EditOutlined
-              onClick={() => {
-                onEditTimeRecord(record);
-              }}
-            />
-            <DeleteOutlined
-              onClick={() => onDeleteTimeRecord(record)}
-              style={{ color: "red", marginLeft: 12 }}
-            />
-          </>
-        );
-      },
-    },
   ];
 
   const fetchData = async () => {
@@ -101,58 +88,88 @@ const TimeTable = () => {
     setIsUpdateModalOpen(true);
   };
 
-  const onDeleteTimeRecord = async (record) => {
-    Modal.confirm({
-      title: "Delete Time Record",
-      content: `Are you sure you want to delete this record?`,
-      okText: "Yes",
-      okType: "danger",
-      cancelText: "Cancel",
-      onOk: () => {
-        loadingMsg("Deleting...");
-        deleteTimeRecord(record);
-      },
-    });
-  };
-
-  const deleteTimeRecord = async (record) => {
-    const res = await deleteTimeRecordById(record.id);
-    const { isClockdIn, ClockdInId } = getClockedInStatusAndId();
-    if (isClockdIn && ClockdInId === record.id) {
-      retsetUserInfo(false);
-    }
-
-    messageApi.destroy();
-    if (res === "sucsess") {
-      successMsg("deleted");
-    } else {
-      errorMsg("failed to delete");
-    }
-    fetchData();
-  };
-
   const onEditTimeRecord = (record) => {
     setIsEdit(true);
     setEditRecord(record);
     setIsUpdateModalOpen(true);
   };
 
+  const handleOnExport = () => {
+    const fileName = "Time Sheet";
+    const exportType = exportFromJSON.types.csv;
+
+    exportFromJSON({ data, fileName, exportType });
+  };
+
+  const items = [
+    {
+      key: "1",
+      label: "Download",
+      icon: <CloudDownloadOutlined />,
+      onClick: handleOnExport,
+    },
+    {
+      key: "2",
+      label: "Filter",
+      icon: <FilterOutlined />,
+    },
+  ];
+
   return (
     <>
       {contextHolder}
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <Button
-          type="primary"
-          onClick={onAddTimeRecord}
-          style={{ margin: 20, alignSelf: "center" }}
-        >
-          Add Time Record
-        </Button>
-      </div>
+      <Space style={{ display: "flex", justifyContent: "space-between" }}>
+        <Space direction="vertical">
+          <Button
+            type="primary"
+            onClick={onAddTimeRecord}
+            style={{ width: "150px" }}
+          >
+            Add Time Record
+          </Button>
+          <Dropdown
+            menu={{
+              items: items,
+              selectable: true,
+              defaultActiveFirst: true,
+              onClick: () => console.log("click"),
+            }}
+          >
+            <Button
+              type="default"
+              icon={<ToolOutlined />}
+              style={{ width: "150px" }}
+            >
+              Options
+            </Button>
+          </Dropdown>
+        </Space>
+        <Space>
+          <Card
+            title="Total Hours"
+            style={{
+              width: "300px",
+              backgroundColor: "#f0f2f5",
+              margin: "20 20 0 0",
+              textAlign: "center",
+            }}
+          >
+            <strong>{255}</strong>
+          </Card>
+        </Space>
+      </Space>
+      <Divider orientation="left">Time History</Divider>
       <Table
         columns={columns}
         rowKey={(record) => record.id}
         dataSource={data}
+        onRow={(record, rowIndex) => {
+          return {
+            onClick: (event) => {
+              onEditTimeRecord(record);
+            },
+          };
+        }}
         loading={loading}
       />
       <ClockModal
@@ -164,6 +181,7 @@ const TimeTable = () => {
         isUpdateModalOpen={isUpdateModalOpen}
         setIsUpdateModalOpen={setIsUpdateModalOpen}
       />
+      <FloatButton.BackTop />
     </>
   );
 };

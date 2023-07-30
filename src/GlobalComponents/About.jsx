@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Layout, Card, Row, Col, Button, Image } from "antd";
+import { Layout, Card, Row, Col, Button, Image, Collapse } from "antd";
 
 const About = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -33,7 +33,8 @@ const About = () => {
                 development, and we are committed to helping businesses and
                 individuals build amazing things with it.
               </p>
-              <p>
+              <Collapse>
+                <p>
                 We have a wealth of experience in React JS, and we are always up
                 to date on the latest trends and technologies. We are also
                 experts in other areas of web development, such as HTML, CSS,
@@ -51,6 +52,8 @@ const About = () => {
                 <li>A React JS mobile app for a large enterprise</li>
                 <li>A React JS web application for a government agency</li>
               </ul>
+              </Collapse>
+              
             </Col>
           </Row>
           <Button type="primary" onClick={() => setIsExpanded(!isExpanded)}>

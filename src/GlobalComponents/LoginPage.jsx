@@ -96,7 +96,7 @@ const LoginPage = () => {
               />
             </Form.Item>
             <Form.Item>
-              <a className="login-form-forgot" href="/signup">
+              <a className="login-form-forgot" href="/otp">
                 Forgot password
               </a>
             </Form.Item>

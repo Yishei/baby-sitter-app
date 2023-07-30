@@ -1,7 +1,12 @@
-import { CreditCardOutlined } from "@ant-design/icons";
+import {
+  CreditCardOutlined,
+  SaveOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
 import { options } from "../menuItems/payOptions";
 import { useEffect, useState, useContext } from "react";
 import { MessageContext } from "../Context/MessageContext";
+import { deletePayRecordById } from "../utilities/PayFuctionality";
 import {
   DatePicker,
   Divider,
@@ -11,6 +16,7 @@ import {
   Radio,
   Select,
   Space,
+  Button,
 } from "antd";
 import dayjs from "dayjs";
 import {
@@ -31,7 +37,7 @@ const PayModal = (props) => {
   } = props;
   const { messageApi, successMsg, errorMsg, loadingMsg } =
     useContext(MessageContext);
-
+  const [saveEnabled, setSaveEnabled] = useState(false);
   const [payType, setPayType] = useState("amount");
   const [form] = Form.useForm();
 
@@ -69,6 +75,7 @@ const PayModal = (props) => {
       .catch((errorInfo) => {
         return;
       });
+    setSaveEnabled(false);
   };
 
   const heandelOkIfNotEdit = async () => {
@@ -120,15 +127,65 @@ const PayModal = (props) => {
     setIsUpdateModalOpen(false);
     setEditRecord(null);
     setIsEdit(false);
+    setSaveEnabled(false);
+  };
+
+  const deletePayment = async () => {
+    const res = await deletePayRecordById(editRecord.id);
+    messageApi.destroy();
+    if (res === "sucsess") {
+      successMsg("Deleted the payment");
+    } else {
+      errorMsg("Failed to delete the payment");
+    }
+    fetchDate();
+  };
+
+  const onDeletePayment = () => {
+    clearForm();
+    setIsUpdateModalOpen(false);
+    Modal.confirm({
+      title: "Delete Payment",
+      content: "Are you sure you want to delete this payment?",
+      okText: "Delete",
+      okType: "danger",
+      cancelText: "Cancel",
+      onOk() {
+        loadingMsg("Deleting the payment...");
+        deletePayment();
+        onCancel();
+      },
+    });
   };
 
   return (
     <Modal
       title={isEdit ? "Update Payment" : "Create Payment"}
-      okText="Save"
       open={isUpdateModalOpen}
       onCancel={onCancel}
-      onOk={onOk}
+      destroyOnClose={true}
+      footer={[
+        <Button key="back" onClick={onCancel}>
+          Cancel
+        </Button>,
+        <Button
+          danger
+          key="delete"
+          onClick={onDeletePayment}
+          icon={<DeleteOutlined />}
+        >
+          Delete
+        </Button>,
+        <Button
+          key="ok"
+          type="primary"
+          onClick={onOk}
+          icon={<SaveOutlined />}
+          disabled={!saveEnabled}
+        >
+          Save
+        </Button>,
+      ]}
     >
       <Space direction="Horizontal">
         <Radio.Group
@@ -136,7 +193,9 @@ const PayModal = (props) => {
           onChange={(e) => setPayType(e.target.value)}
         >
           <Radio.Button value="amount">Amount</Radio.Button>
-          <Radio.Button value="date-range">Date Range</Radio.Button>
+          <Radio.Button value="date-range" disabled>
+            Date Range
+          </Radio.Button>
         </Radio.Group>
       </Space>
       <Divider />
@@ -156,6 +215,7 @@ const PayModal = (props) => {
               style={{ width: "100%" }}
               format={"MM/DD/YYYY"}
               disabledDate={(date) => date > new Date()}
+              onChange={() => setSaveEnabled(true)}
             />
           </Form.Item>
           <Form.Item
@@ -174,6 +234,7 @@ const PayModal = (props) => {
               min={0}
               precision={2}
               prefix={<CreditCardOutlined />}
+              onChange={() => setSaveEnabled(true)}
             />
           </Form.Item>
           <Form.Item
@@ -186,7 +247,11 @@ const PayModal = (props) => {
               },
             ]}
           >
-            <Select placeholder="Select Method" options={options} />
+            <Select
+              placeholder="Select Method"
+              options={options}
+              onChange={() => setSaveEnabled(true)}
+            />
           </Form.Item>
         </Form>
       ) : (

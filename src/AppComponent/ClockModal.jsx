@@ -1,13 +1,16 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { UserContext } from "../Context/UserContext";
 import { MessageContext } from "../Context/MessageContext";
 import dayjs from "dayjs";
-import { Form, Modal, DatePicker, TimePicker } from "antd";
+import { Form, Modal, DatePicker, TimePicker, Button } from "antd";
 import {
   getTimeRecordById,
   createNewTimeRcord,
   updateTimeRecordById,
 } from "../utilities/ClockFuctionality";
+import { deleteTimeRecordById } from "../utilities/ClockFuctionality";
+
+import { SaveOutlined, DeleteOutlined } from "@ant-design/icons";
 
 const ClockModal = (props) => {
   const {
@@ -22,6 +25,7 @@ const ClockModal = (props) => {
   const { getClockedInStatusAndId, retsetUserInfo } = useContext(UserContext);
   const { messageApi, successMsg, errorMsg, loadingMsg } =
     useContext(MessageContext);
+  const [saveEnabled, setSaveEnabled] = useState(false);
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -58,6 +62,7 @@ const ClockModal = (props) => {
       .catch((errorInfo) => {
         return;
       });
+    setSaveEnabled(false);
   };
 
   const hendelOkIfNotEdit = async () => {
@@ -80,9 +85,9 @@ const ClockModal = (props) => {
   };
 
   const hendelOkIfEditAndClockedIn = async () => {
-    const {isClockdIn, ClockdInId } = getClockedInStatusAndId();
+    const { isClockdIn, ClockdInId } = getClockedInStatusAndId();
     if (isClockdIn && ClockdInId === editRecord.id) {
-          await retsetUserInfo(false);
+      await retsetUserInfo(false);
     }
   };
 
@@ -122,15 +127,71 @@ const ClockModal = (props) => {
     setIsUpdateModalOpen(false);
     setEditRecord(null);
     setIsEdit(false);
+    setSaveEnabled(false);
+  };
+
+  const deleteTimeRecord = async () => {
+    const res = await deleteTimeRecordById(editRecord.id);
+    const { isClockdIn, ClockdInId } = getClockedInStatusAndId();
+    if (isClockdIn && ClockdInId === editRecord.id) {
+      retsetUserInfo(false);
+    }
+
+    messageApi.destroy();
+    if (res === "sucsess") {
+      successMsg("deleted");
+    } else {
+      errorMsg("failed to delete");
+    }
+    fetchData();
+  };
+
+  const onDeleteTimeRecord = async () => {
+    clearForm();
+    setIsUpdateModalOpen(false);
+    Modal.confirm({
+      title: "Delete Time Record",
+      content: `Are you sure you want to delete this record?`,
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "Cancel",
+      onOk: () => {
+        loadingMsg("Deleting...");
+        deleteTimeRecord();
+        onCancel();
+      },
+    });
   };
 
   return (
     <Modal
       title={isEdit ? "Update Time Record" : "Log Time"}
-      okText="Add"
+      okText="Save"
       open={isUpdateModalOpen}
       onCancel={onCancel}
-      onOk={onOk}
+      distroyOnClose={true}
+      footer={[
+        <Button key="back" onClick={onCancel}>
+          Cancel
+        </Button>,
+        <Button
+          danger
+          key="delete"
+          onClick={onDeleteTimeRecord}
+          icon={<DeleteOutlined />}
+        >
+          Delete
+        </Button>,
+        <Button
+          key="ok"
+          type="primary"
+          onClick={onOk}
+          icon={<SaveOutlined />}
+          disabled={!saveEnabled}
+        >
+          Save
+        </Button>,
+      ]}
     >
       <Form form={form} labelCol={{ span: 7 }} wrapperCol={{ span: 14 }}>
         <Form.Item
@@ -148,6 +209,7 @@ const ClockModal = (props) => {
             style={{ width: "100%" }}
             format={"MM/DD/YYYY"}
             disabledDate={(date) => date > new Date()}
+            onChange={() => setSaveEnabled(true)}
           />
         </Form.Item>
         <Form.Item
@@ -161,7 +223,12 @@ const ClockModal = (props) => {
             },
           ]}
         >
-          <TimePicker use12Hours format="h:mm A" style={{ width: "100%" }} />
+          <TimePicker
+            use12Hours
+            format="h:mm A"
+            style={{ width: "100%" }}
+            onChange={() => setSaveEnabled(true)}
+          />
         </Form.Item>
         <Form.Item
           label="Time Out"
@@ -180,7 +247,12 @@ const ClockModal = (props) => {
             }),
           ]}
         >
-          <TimePicker use12Hours format="h:mm A" style={{ width: "100%" }} />
+          <TimePicker
+            use12Hours
+            format="h:mm A"
+            style={{ width: "100%" }}
+            onChange={() => setSaveEnabled(true)}
+          />
         </Form.Item>
       </Form>
     </Modal>
