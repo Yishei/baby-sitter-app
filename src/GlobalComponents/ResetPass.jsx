@@ -1,17 +1,13 @@
 import { useContext } from "react";
 import { MessageContext } from "../Context/MessageContext";
-import { Card, Form, Layout, Menu, Button, Input } from "antd";
-import { Header } from "antd/es/layout/layout";
-import { items } from "../menuItems/loginMenuItems";
+import { Card, Form, Layout, Button, Input } from "antd";
+import GlobalHeader from "./GlobalHeader";
 
 const ResetPass = () => {
   const { contextHolder } = useContext(MessageContext);
   return (
     <>
-      <Header>
-        <img src="/babysitterapp-Logo.png" alt="Logo" width="200" height="50" />
-      </Header>
-      <Menu mode="horizontal" items={items} />
+      <GlobalHeader />
       {contextHolder}
       <Layout style={{ alignItems: "center" }}>
         <Card

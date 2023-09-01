@@ -4,17 +4,15 @@ import {
   Checkbox,
   Input,
   InputNumber,
-  Menu,
   Spin,
   Layout,
   Card,
 } from "antd";
-import { Header } from "antd/es/layout/layout";
-import { items } from "../menuItems/loginMenuItems";
 import { signup } from "../utilities/SignUpFuctionality";
 import { useState, useContext } from "react";
 import { MessageContext } from "../Context/MessageContext";
 import SignUpSuccess from "./SignUpSuccess";
+import GlobalHeader from "./GlobalHeader";
 
 const SignUp = () => {
   const [signedUp, setSignedUp] = useState(false);
@@ -50,10 +48,7 @@ const SignUp = () => {
 
   return (
     <>
-      <Header>
-        <img src="/babysitterapp-Logo.png" alt="Logo" width="200" height="50" />
-      </Header>
-      <Menu mode="horizontal" items={items} />
+      <GlobalHeader />
       {contextHolder}
       {!signedUp ? (
         <Spin spinning={loading} tip="Signing Up...">

@@ -9,6 +9,7 @@
   "updateClockInStateUrl": "http://localhost:8080/time/UpdateclockStatus/",
   "getAllTimeUrl": "http://localhost:8080/time/all",
   "getAllPaymentsUrl": "http://localhost:8080/pay/all",
+  "getPayByDateUrl": "http://localhost:8080/pay/dateFiltered",
   "getAllNotficationsUrl": "http://localhost:8080/notification/all",
   "getTotalDataUrl": "http://localhost:8080/time/total",
   "singInUrl": "http://localhost:8080/users/login",

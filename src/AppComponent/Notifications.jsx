@@ -44,7 +44,7 @@ const Notifications = () => {
         }}
         style={{
           right: 25,
-          bottom: 100,
+          bottom: 20,
         }}
       />
       <Drawer

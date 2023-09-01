@@ -13,6 +13,7 @@ const SideBar = () => {
       bottom: 0,
     }}>
         <div className="ant-layout-sider-header">
+          <a href="/">
           <img
             src="/babysitterapp-Logo.png"
             alt="logo"
@@ -20,6 +21,7 @@ const SideBar = () => {
             height="75"
             style={{ borderRadius: "10px", marginBottom: '40px', marginTop: '40px' }}
           />
+          </a>
         </div>
 
       <Menu

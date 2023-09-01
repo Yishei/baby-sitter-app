@@ -3,9 +3,8 @@ import { UserContext } from "../Context/UserContext";
 import { MessageContext } from "../Context/MessageContext";
 import { useNavigate } from "react-router-dom";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Card, Form, Input, Menu, Layout } from "antd";
-import { Header } from "antd/es/layout/layout";
-import { items } from "../menuItems/loginMenuItems";
+import { Button, Card, Form, Input, Layout } from "antd";
+import GlobalHeader from "./GlobalHeader";
 
 const LoginPage = () => {
   const [form] = Form.useForm();
@@ -45,10 +44,7 @@ const LoginPage = () => {
 
   return (
     <>
-      <Header>
-        <img src="/babysitterapp-Logo.png" alt="Logo" width="200" height="50" />
-      </Header>
-      <Menu mode="horizontal" items={items} />
+    <GlobalHeader />
       {contextHolder}
       <Layout style={{ alignItems: "center" }}>
         <Card

@@ -1,68 +1,61 @@
-import React, { useState } from "react";
-import { Layout, Card, Row, Col, Button, Image, Collapse } from "antd";
+import React from "react";
+import GlobalHeader from "./GlobalHeader";
+import { Space, Typography, Button } from "antd";
 
-const About = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
+const AboutPage = () => {
   return (
-    <Layout>
-      <Layout.Content>
-        <Card
-          title="About Us"
-          style={{ marginBottom: 16 }}
-          expandable={true}
-          expanded={isExpanded}
-          onExpandChange={setIsExpanded}
-        >
-          <Row>
-            <div>
-              <Col span={8}>
-                <Image
-                  src="/babysitterapp-Logo.png"
-                  alt="Company logo"
-                  width="120"
-                  height="150"
-                />
-              </Col>
-            </div>
-
-            <Col span={16}>
-              <p>
-                We are a team of developers who are passionate about creating
-                React JS projects. We believe that React JS is the future of web
-                development, and we are committed to helping businesses and
-                individuals build amazing things with it.
-              </p>
-              <Collapse>
-                <p>
-                We have a wealth of experience in React JS, and we are always up
-                to date on the latest trends and technologies. We are also
-                experts in other areas of web development, such as HTML, CSS,
-                and JavaScript.
-              </p>
-              <p>
-                We are committed to providing our clients with the best possible
-                service. We are always available to answer questions and provide
-                support. We also offer a variety of services, such as
-                development, design, and maintenance.
-              </p>
-              <p>Here are some of our recent projects:</p>
-              <ul>
-                <li>A React JS web application for a small business</li>
-                <li>A React JS mobile app for a large enterprise</li>
-                <li>A React JS web application for a government agency</li>
-              </ul>
-              </Collapse>
-              
-            </Col>
-          </Row>
-          <Button type="primary" onClick={() => setIsExpanded(!isExpanded)}>
-            {isExpanded ? "Collapse" : "Expand"}
+    <>
+      <GlobalHeader />
+      <Space direction="vertical" style={{ width: "100%" }}>
+        <Typography.Title level={3} style={{ marginBottom: 10 }}>
+          About Us
+        </Typography.Title>
+        <div>
+          <Typography.Text>
+            I'm a new developer and this is my first project. I'm a father of two,
+            and I know the struggle of keeping track of babysitting hours and pay.
+            Therefore, I created this app to help me and other parents to keep track
+            of the hours and pay of the babysitter.
+          </Typography.Text>
+        </div>
+        <div>
+          <Typography.Text>
+            This app is free to use, and I hope you will find it useful. As of now,
+            the app is only available for parents and not for babysitters. We are
+            working on a version for babysitters as well.
+          </Typography.Text>
+        </div>
+        <div>
+          <Typography.Text>
+            With this app, you can:
+          </Typography.Text>
+          <ul>
+            <li>
+              <Typography.Text>Clock in via SMS</Typography.Text>
+            </li>
+            <li>
+              <Typography.Text>Keep track of the hours</Typography.Text>
+            </li>
+            <li>
+              <Typography.Text>Keep track of the pay</Typography.Text>
+            </li>
+            <li>
+              <Typography.Text>Export the data to Excel</Typography.Text>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <Button
+            type="primary"
+            size="large"
+            style={{ marginTop: 10 }}
+            href={`mailto:yisheijacobowitz@gmailcom`}>
+            Contact Us
           </Button>
-        </Card>
-      </Layout.Content>
-    </Layout>
+        </div>
+      </Space>
+    </>
   );
 };
 
-export default About;
+export default AboutPage;

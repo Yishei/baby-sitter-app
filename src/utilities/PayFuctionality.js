@@ -15,6 +15,25 @@ export const getPayRecordById = async (id) => {
   }
 };
 
+export const getPayByDate = async (dateObj) => {
+  try {
+    let records = await fetch(`${urls.getPayByDateUrl}`, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dateObj),
+    });
+
+    records = await records.json();
+    return records;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
 export const createNewPayRecord = async (record) => {
   try {
     await fetch(urls.createNewPayUrl, {
@@ -60,4 +79,14 @@ export const deletePayRecordById = async (id) => {
   } catch (e) {
     return "fail";
   }
+};
+
+/**
+ *
+ * @param {Date} firstDateOfWeek
+ */
+const getLastDateOfWeek = (firstDateOfWeek) => {
+  const dayOfWeek = firstDateOfWeek.getDay();
+  const lastDateOfWeek = new Date(firstDateOfWeek);
+  lastDateOfWeek.setDate(lastDateOfWeek.getDate() + 6 - dayOfWeek);
 };

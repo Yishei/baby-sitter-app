@@ -26,10 +26,12 @@ const ClockModal = (props) => {
   const { messageApi, successMsg, errorMsg, loadingMsg } =
     useContext(MessageContext);
   const [saveEnabled, setSaveEnabled] = useState(false);
+  const [deleteEnabled, setDeleteEnabeld] = useState(false);
   const [form] = Form.useForm();
 
   useEffect(() => {
     if (isEdit && isUpdateModalOpen) {
+      setDeleteEnabeld(true);
       getTimeRecordById(editRecord.id).then((data) => {
         if (data === null) {
           setIsEdit(false);
@@ -41,8 +43,17 @@ const ClockModal = (props) => {
           timeOut: data.TimeOut === null ? "" : dayjs(data.TimeOut),
         });
       });
+    } else {
+      setDeleteEnabeld(false);
     }
-  }, [isEdit, isUpdateModalOpen, editRecord, form, setIsEdit]);
+  }, [
+    isEdit,
+    isUpdateModalOpen,
+    editRecord,
+    form,
+    setIsEdit,
+    setDeleteEnabeld,
+  ]);
 
   const onOk = async () => {
     form
@@ -179,6 +190,7 @@ const ClockModal = (props) => {
           key="delete"
           onClick={onDeleteTimeRecord}
           icon={<DeleteOutlined />}
+          disabled={!deleteEnabled}
         >
           Delete
         </Button>,

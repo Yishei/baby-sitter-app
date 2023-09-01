@@ -38,11 +38,13 @@ const PayModal = (props) => {
   const { messageApi, successMsg, errorMsg, loadingMsg } =
     useContext(MessageContext);
   const [saveEnabled, setSaveEnabled] = useState(false);
+  const [deleteEnabled, setDeleteEnabeld] = useState(false);
   const [payType, setPayType] = useState("amount");
   const [form] = Form.useForm();
 
   useEffect(() => {
     if (isEdit && isUpdateModalOpen) {
+      setDeleteEnabeld(true);
       getPayRecordById(editRecord.id).then((data) => {
         if (data === null) {
           setIsEdit(false);
@@ -54,8 +56,17 @@ const PayModal = (props) => {
           method: data.payMethod,
         });
       });
+    } else {
+      setDeleteEnabeld(false);
     }
-  }, [isEdit, isUpdateModalOpen, editRecord, form, setIsEdit]);
+  }, [
+    isEdit,
+    isUpdateModalOpen,
+    editRecord,
+    form,
+    setIsEdit,
+    setDeleteEnabeld,
+  ]);
 
   const onOk = () => {
     form
@@ -173,6 +184,7 @@ const PayModal = (props) => {
           key="delete"
           onClick={onDeletePayment}
           icon={<DeleteOutlined />}
+          disabled={!deleteEnabled}
         >
           Delete
         </Button>,
