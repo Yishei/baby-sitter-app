@@ -20,7 +20,6 @@ import {
 } from "antd";
 import dayjs from "dayjs";
 import {
-  getPayRecordById,
   createNewPayRecord,
   updatePayRecordById,
 } from "../utilities/PayFuctionality";
@@ -45,16 +44,11 @@ const PayModal = (props) => {
   useEffect(() => {
     if (isEdit && isUpdateModalOpen) {
       setDeleteEnabeld(true);
-      getPayRecordById(editRecord.id).then((data) => {
-        if (data === null) {
-          setIsEdit(false);
-          return;
-        }
-        form.setFieldsValue({
-          date: dayjs(data.payDate),
-          amount: data.amount,
-          method: data.payMethod,
-        });
+      const { pay_date, amount, pay_method } = editRecord;
+      form.setFieldsValue({
+        pay_date: dayjs(pay_date),
+        amount: amount,
+        pay_method: pay_method,
       });
     } else {
       setDeleteEnabeld(false);
@@ -73,10 +67,10 @@ const PayModal = (props) => {
       .validateFields()
       .then((values) => {
         loadingMsg("Sit tight...");
-        if (isEdit) {
-          heandelOkIfEdit();
-        } else {
+        if (!isEdit) {
           heandelOkIfNotEdit();
+        } else {
+          heandelOkIfEdit();
         }
         clearForm();
         setIsUpdateModalOpen(false);
@@ -90,11 +84,12 @@ const PayModal = (props) => {
   };
 
   const heandelOkIfNotEdit = async () => {
-    const { date, amount, method } = form.getFieldsValue();
+    console.log("heandelOkIfNotEdit");
+    const { pay_date, amount, pay_method } = form.getFieldsValue();
     const record = {
-      payDate: date,
+      pay_date,
       amount,
-      payMethod: method,
+      pay_method,
     };
     const res = await createNewPayRecord(record);
     messageApi.destroy();
@@ -107,12 +102,12 @@ const PayModal = (props) => {
   };
 
   const heandelOkIfEdit = async () => {
-    const { date, amount, method } = form.getFieldsValue();
-    const recordId = editRecord.id;
+    const { pay_date, amount, pay_method } = form.getFieldsValue();
+    const recordId = editRecord.pay_id;
     const record = {
-      payDate: date,
+      pay_date,
       amount,
-      payMethod: method,
+      pay_method,
     };
 
     const res = await updatePayRecordById(recordId, record);
@@ -127,9 +122,9 @@ const PayModal = (props) => {
 
   const clearForm = () => {
     form.setFieldsValue({
-      date: "",
+      pay_date: "",
       amount: "",
-      method: "",
+      pay_method: "",
     });
   };
 
@@ -142,7 +137,7 @@ const PayModal = (props) => {
   };
 
   const deletePayment = async () => {
-    const res = await deletePayRecordById(editRecord.id);
+    const res = await deletePayRecordById(editRecord.pay_id);
     messageApi.destroy();
     if (res === "sucsess") {
       successMsg("Deleted the payment");
@@ -215,7 +210,7 @@ const PayModal = (props) => {
         <Form form={form} labelCol={{ span: 5 }} wrapperCol={{ span: 14 }}>
           <Form.Item
             label="Date"
-            name={"date"}
+            name={"pay_date"}
             rules={[
               {
                 required: true,
@@ -251,7 +246,7 @@ const PayModal = (props) => {
           </Form.Item>
           <Form.Item
             label="Method"
-            name={"method"}
+            name={"pay_method"}
             rules={[
               {
                 required: true,

@@ -15,6 +15,7 @@ export const UserContextProvider = ({ children }) => {
 
 
   window.onload = () => {
+    console.log("window loaded");
     hendleLocalStorage();
   };
 
@@ -53,8 +54,8 @@ export const UserContextProvider = ({ children }) => {
     if (localStorage.getItem("user")) {
       const user = JSON.parse(localStorage.getItem("user"));
       return {
-        isClockdIn: user.isClockdIn,
-        ClockdInId: user.ClockdInId,
+        isClockdIn: user.is_clockd_in,
+        ClockdInId: user.Clockd_In_id,
       };
     }
   };
@@ -102,6 +103,7 @@ export const UserContextProvider = ({ children }) => {
       const info = await update_User_Info(userInfo);
       localStorage.setItem("user", JSON.stringify(info));
       setUserInfo(info);
+      console.log('user info updated', userInfo)
       return "sucsess";
     } catch (e) {
       return "fail";

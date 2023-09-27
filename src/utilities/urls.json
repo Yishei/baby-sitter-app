@@ -20,5 +20,9 @@
   "getPayByIdUrl": "http://localhost:8080/pay/byId/",
   "createNewPayUrl": "http://localhost:8080/pay/newPayment",
   "updatePayByIdUrl": "http://localhost:8080/pay/update/",
-  "deletePayByIdUrl": "http://localhost:8080/pay/delete/"
+  "deletePayByIdUrl": "http://localhost:8080/pay/delete/",
+  "createRemindersUrl": "http://localhost:8080/reminders",
+  "getRemindersForWeekDayUrl": "http://localhost:8080/reminders/forUser/",
+  "getRemindersUrl": "http://localhost:8080/reminders"
 }
+

@@ -66,7 +66,7 @@ const SignUp = () => {
                 wrapperCol={{ span: 14 }}
               >
                 <Form.Item
-                  name="fullName"
+                  name="full_name"
                   label="Full Name"
                   rules={[
                     {
@@ -87,7 +87,7 @@ const SignUp = () => {
                   <Input placeholder="Enter you Name" />
                 </Form.Item>
                 <Form.Item
-                  name="email"
+                  name="user_email"
                   label="Eamil"
                   rules={[
                     {
@@ -142,7 +142,7 @@ const SignUp = () => {
                   <Input.Password placeholder="Confirm your password" />
                 </Form.Item>
                 <Form.Item
-                  name="phone"
+                  name="mobile_phone"
                   label="Phone Number"
                   rules={[
                     {

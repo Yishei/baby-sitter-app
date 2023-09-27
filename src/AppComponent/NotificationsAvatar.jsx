@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getFormattedNotficationData } from "../utilities/LoderData";
-import { FloatButton, Drawer, Card, Empty } from "antd";
-import { BellFilled } from "@ant-design/icons";
+import { Drawer, Card, Empty, Avatar, Badge } from "antd";
+import { BellOutlined } from "@ant-design/icons";
 const { Meta } = Card;
 
 const Notifications = () => {
@@ -31,22 +31,16 @@ const Notifications = () => {
 
   return (
     <>
-      <FloatButton
-        tooltip="Notifications"
-        shape="circle"
-        type="primary"
-        icon={<BellFilled />}
-        onClick={showDrawer}
-        badge={{
-          count: notificationCount,
-          color: "red",
-          size: "small",
-        }}
-        style={{
-          right: 25,
-          bottom: 20,
-        }}
-      />
+      <span className="bell-Avatar-Span  hed-ave" >
+        <Badge count={notificationCount} size="small">
+        <Avatar
+          size={45}
+          icon={<BellOutlined />}
+          onClick={showDrawer}
+        />
+        </Badge>
+      </span>
+
       <Drawer
         title="Notifications"
         placement="right"
@@ -58,11 +52,11 @@ const Notifications = () => {
 
         {notifications.map((notification) => (
           <Card
-            key={notification.id}
+            key={notification.notification_id}
             title={`${notification.title}-${notification.time}`}
             style={{ width: 325, marginTop: 5 }}
           >
-            <Meta title={notification.Type} description={notification.Body} />
+            <Meta title={notification.type} description={notification.body} />
           </Card>
         ))}
       </Drawer>

@@ -53,7 +53,7 @@ const PayTable = () => {
       <Table
         columns={payColumns}
         dataSource={data}
-        rowKey={(record) => record.id}
+        rowKey={(record) => record.pay_id}
         onRow={(record, rowIndex) => {
           return {
             onClick: (event) => {

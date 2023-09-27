@@ -26,13 +26,6 @@ const Settings = () => {
             margin: "0",
           }}
         >
-          <List.Item extra={<NavLink to="/settings/personal"><RightOutlined /></NavLink>}>
-            <List.Item.Meta
-              avatar={<IdcardTwoTone />}
-              title={<NavLink to="/settings/personal">Personal information</NavLink>}
-              description="Your personal information"
-            />
-          </List.Item>
           <List.Item extra={<NavLink to="/settings/paySchedule"><RightOutlined /></NavLink>}>
             <List.Item.Meta
               avatar={<CalendarTwoTone />}
@@ -51,7 +44,6 @@ const Settings = () => {
           
         </List>
         <Card
-          title={<i>Account Settings</i>}
           style={{
             width: "50%",
             margin: "0",

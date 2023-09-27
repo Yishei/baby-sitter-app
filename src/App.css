@@ -112,3 +112,27 @@ Content {
   cursor: pointer;
 }
 
+.ant-Avatar-div {
+  background-color: transparent;
+  margin: 10px 10px 10px 10px;
+  width: auto;
+  right: 0px;
+  float: right;
+}
+
+.user-Avatar {
+  margin: 15px 20px 20px 10px;
+}
+
+.bell-Avatar-Span {
+  margin: 10px 20px 20px 10px;
+  width: 45px;
+  height: 45px;
+  line-height: 45px;
+  font-size: 22.5px;
+}
+
+.hed-ave:hover {
+  cursor: pointer;
+}
+

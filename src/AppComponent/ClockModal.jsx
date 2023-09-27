@@ -4,7 +4,6 @@ import { MessageContext } from "../Context/MessageContext";
 import dayjs from "dayjs";
 import { Form, Modal, DatePicker, TimePicker, Button } from "antd";
 import {
-  getTimeRecordById,
   createNewTimeRcord,
   updateTimeRecordById,
 } from "../utilities/ClockFuctionality";
@@ -32,16 +31,12 @@ const ClockModal = (props) => {
   useEffect(() => {
     if (isEdit && isUpdateModalOpen) {
       setDeleteEnabeld(true);
-      getTimeRecordById(editRecord.id).then((data) => {
-        if (data === null) {
-          setIsEdit(false);
-          return;
-        }
-        form.setFieldsValue({
-          date: dayjs(data.forDate),
-          timeIn: dayjs(data.TimeIn),
-          timeOut: data.TimeOut === null ? "" : dayjs(data.TimeOut),
-        });
+      const { for_date, time_in, time_out } = editRecord;
+      form.setFieldsValue({
+        for_date: dayjs(for_date),
+        time_in: dayjs(time_in, "hh:mm:ss A"),
+        time_out:
+          time_out === "Invalid date" ? "" : dayjs(time_out, "hh:mm:ss A"),
       });
     } else {
       setDeleteEnabeld(false);
@@ -77,13 +72,13 @@ const ClockModal = (props) => {
   };
 
   const hendelOkIfNotEdit = async () => {
-    const { date, timeIn, timeOut } = form.getFieldsValue();
+    const { for_date, time_in, time_out } = form.getFieldsValue();
     const record = {
-      forDate: date,
-      timeIn: timeIn,
-      timeOut: timeOut,
-      InSource: "Log Time",
-      OutSource: "Log Time",
+      for_date,
+      time_in,
+      time_out,
+      in_source: "Log Time",
+      out_source: "Log Time",
     };
     const res = await createNewTimeRcord(record);
     messageApi.destroy();
@@ -97,25 +92,25 @@ const ClockModal = (props) => {
 
   const hendelOkIfEditAndClockedIn = async () => {
     const { isClockdIn, ClockdInId } = getClockedInStatusAndId();
-    if (isClockdIn && ClockdInId === editRecord.id) {
+    if (isClockdIn && ClockdInId === editRecord.log_id) {
       await retsetUserInfo(false);
     }
   };
 
   const hendelOkIfEdit = async () => {
-    const { date, timeIn, timeOut } = form.getFieldsValue();
-    const recordId = editRecord.id;
+    const { for_date, time_in, time_out } = form.getFieldsValue();
+    const recordId = editRecord.log_id;
     const record = {
-      forDate: date,
-      timeIn: timeIn,
-      timeOut: timeOut === "" ? null : timeOut,
+      for_date,
+      time_in,
+      time_out: time_out === "" ? null : time_out,
     };
 
     const res = await updateTimeRecordById(recordId, record);
     messageApi.destroy();
 
     if (res === "sucsess") {
-      if (editRecord.timeOut === "Invalid date" && timeOut !== null) {
+      if (editRecord.time_out === "Invalid date" && time_out !== null) {
         hendelOkIfEditAndClockedIn();
       }
       fetchData();
@@ -127,9 +122,9 @@ const ClockModal = (props) => {
 
   const clearForm = () => {
     form.setFieldsValue({
-      date: "",
-      timeIn: "",
-      timeOut: "",
+      for_date: "",
+      time_in: "",
+      time_out: "",
     });
   };
 
@@ -142,9 +137,9 @@ const ClockModal = (props) => {
   };
 
   const deleteTimeRecord = async () => {
-    const res = await deleteTimeRecordById(editRecord.id);
+    const res = await deleteTimeRecordById(editRecord.log_id);
     const { isClockdIn, ClockdInId } = getClockedInStatusAndId();
-    if (isClockdIn && ClockdInId === editRecord.id) {
+    if (isClockdIn && ClockdInId === editRecord.log_id) {
       retsetUserInfo(false);
     }
 
@@ -208,7 +203,7 @@ const ClockModal = (props) => {
       <Form form={form} labelCol={{ span: 7 }} wrapperCol={{ span: 14 }}>
         <Form.Item
           label="Date"
-          name={"date"}
+          name={"for_date"}
           required={false}
           rules={[
             {
@@ -226,7 +221,7 @@ const ClockModal = (props) => {
         </Form.Item>
         <Form.Item
           label="Time In"
-          name={"timeIn"}
+          name={"time_in"}
           required={false}
           rules={[
             {
@@ -244,14 +239,15 @@ const ClockModal = (props) => {
         </Form.Item>
         <Form.Item
           label="Time Out"
-          name={"timeOut"}
+          name={"time_out"}
           required={false}
           rules={[
             ({ getFieldValue }) => ({
               validator(_, value) {
-                if (!value || getFieldValue("timeIn") < value) {
+                if (!value || getFieldValue("time_in") < value) {
                   return Promise.resolve();
                 }
+                setSaveEnabled(false);
                 return Promise.reject(
                   new Error("Time out must be greater than time in!")
                 );

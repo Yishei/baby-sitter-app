@@ -10,7 +10,11 @@ import {
   getFormattedPaymentsData,
   getFormattedNotficationData,
   getFormattedTotalData,
+  getUserInfo,
+  getFormattedReminderData,
 } from "../utilities/LoderData";
+
+// varify user function
 import { varifyToken } from "../utilities/userFunctionality";
 
 // global components
@@ -29,7 +33,7 @@ import PayTable from "../AppComponent/PayTable";
 
 // settings components
 import Settings from "../AppComponent/Settings";
-import PersonalInfo from "../settingsComponents/PersonalInfo";
+import PersonalInfo from "../AppComponent/Profile";
 import ErrorPage from "../GlobalComponents/Error-Page";
 import PaymentSchedule from "../settingsComponents/PaymentSchedule";
 import TimeSchedule from "../settingsComponents/TimeSchedule";
@@ -41,37 +45,59 @@ const appRoutes = createBrowserRouter(
   createRoutesFromElements(
     // app routes
     <Route>
-      <Route path="/" element={<PrivateRoute />} loader={varifyToken}>
-        <Route path="/">
-          <Route
-            path="/"
-            element={<AppBody />}
-            loader={getFormattedNotficationData}
-            errorElement={<ErrorPage />}
-          >
+      <Route path="/">
+        <Route
+          path="/"
+          element={<AppBody />}
+          loader={getFormattedNotficationData}
+          errorElement={<ErrorPage />}
+        >
+          <Route path="/" element={<PrivateRoute />} loader={varifyToken}>
             <Route
               index
               element={<ClockInOut />}
               loader={getFormattedTotalData}
               errorElement={<ErrorPage />}
             />
-            <Route
-              path="data"
-              element={<TimeTable />}
-              loader={getFormattedTimeData}
-              errorElement={<ErrorPage />}
-            />
+          </Route>
+
+          <Route path="/" element={<PrivateRoute />} loader={varifyToken}>
             <Route
               path="Payments"
               element={<PayTable />}
               loader={getFormattedPaymentsData}
             />
+          </Route>
+          <Route path="/" element={<PrivateRoute />} loader={varifyToken}>
+            <Route
+              path="timeCard"
+              element={<TimeTable />}
+              loader={getFormattedTimeData}
+              errorElement={<ErrorPage />}
+            />
+          </Route>
+          <Route path="/" element={<PrivateRoute />} loader={varifyToken}>
+            <Route
+              path="profile"
+              element={<PersonalInfo />}
+              loader={getUserInfo}
+              errorElement={<ErrorPage />}
+            />
+          </Route>
 
-            {/* settings routes */}
+          {/* settings routes */}
+          <Route
+            path="settings"
+            element={<PrivateRoute />}
+            loader={varifyToken}
+          >
             <Route path="/settings" element={<Settings />}>
-              <Route path="personal" element={<PersonalInfo />} />
               <Route path="paySchedule" element={<PaymentSchedule />} />
-              <Route path="timeSchedule" element={<TimeSchedule />} />
+              <Route
+                path="timeSchedule"
+                element={<TimeSchedule />}
+                loader={getFormattedReminderData}
+              />
             </Route>
           </Route>
         </Route>

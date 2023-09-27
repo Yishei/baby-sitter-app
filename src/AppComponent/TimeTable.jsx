@@ -52,7 +52,7 @@ const TimeTable = () => {
       <Divider orientation="left">Time History</Divider>
       <Table
         columns={timeColumns}
-        rowKey={(record) => record.id}
+        rowKey={(record) => record.log_id}
         dataSource={data}
         onRow={(record, rowIndex) => {
           return {

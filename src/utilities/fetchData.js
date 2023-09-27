@@ -1,4 +1,5 @@
 const urls = require("./urls.json");
+
 export const fetchTimeRecordsAll = async () => {
   try {
     const response = await fetch(urls.getAllTimeUrl, {
@@ -55,6 +56,22 @@ export const fetchTotalData = async () => {
     const data = await res.json();
     return data;
   } catch (e) {
+    console.trace(e);
     throw new Error(e);
+  }
+};
+
+export const fetchReminderData = async () => {
+  try {
+    const response = await fetch(urls.getRemindersUrl, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
+    const data = await response.json();
+    return data;
+  } catch (e) {
+    console.trace(e);
   }
 };

@@ -6,7 +6,7 @@ import UserInfoDiv from "./UserInfoDiv";
 
 const UserCard = () => {
   const { userInfo } = useContext(UserContext);
-  const { fullName, Id } = userInfo;
+  const { full_name, user_id } = userInfo;
   return (
     <Col span={12}>
       <Card
@@ -20,8 +20,8 @@ const UserCard = () => {
           icon={<UserOutlined />}
         />
         <Space className="user-info-space">
-          <UserInfoDiv info="Name" value={fullName} />
-          <UserInfoDiv info="ID" value={Id} />
+          <UserInfoDiv info="Name" value={full_name} />
+          <UserInfoDiv info="ID" value={user_id} />
            {/* <UserInfoDiv info="Rate" value={`$${Rate.toFixed(2)}`} /> */}
         </Space>
       </Card>
